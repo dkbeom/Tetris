@@ -9,6 +9,8 @@ const COLS = 10;
 
 let testMoving;
 let score = 0;
+let fallInterval;
+let duration = 1000;
 
 const movingBlock = {
     type: "elRight",
@@ -26,8 +28,6 @@ function init() {
         prependNewLine();
     }
 
-    table.children[15].children[6].classList.add('seized');
-    
     createNewBlock();
 }
 
@@ -73,7 +73,6 @@ function testBlock() {
         const y = element[1] + Y;
         if (x < 0 || x >= COLS || y < 0 || y >= ROWS || table.children[y].children[x].classList.contains('seized')) {
             // 테스트 불통
-            console.log("testBlock 불통");
             return true;
         }
     })
@@ -101,6 +100,14 @@ function changeDirection() {
         movingBlock["direction"] === 0 ? movingBlock["direction"] = 3 : movingBlock["direction"] -= 1;
     }
     renderBlock();
+}
+
+// 블럭을 바로 떨어뜨리는 함수
+function dropBlock() {
+    clearInterval(fallInterval);
+    fallInterval = setInterval(()=>{
+        moveBlock('Y', 1);
+    },1);
 }
 
 // 블럭을 놓여진 상태로 변환
@@ -134,6 +141,12 @@ function checkMatch() {
 
 // 새로운 블럭 생성
 function createNewBlock() {
+
+    clearInterval(fallInterval);
+    fallInterval = setInterval(()=>{
+        moveBlock('Y', 1);
+    },duration);
+
     const blockTypeList = Object.keys(BLOCKS);
     const random = Math.floor(Math.random() * blockTypeList.length);
 
@@ -143,7 +156,18 @@ function createNewBlock() {
     movingBlock.X = 3;
     movingBlock.Y = 0;
 
+    // 새로 생성되는 블럭이 바로 테스트 불통하면 게임 종료
+    if(testBlock()){
+        gameover();
+    }
+
     renderBlock(false, null);
+}
+
+// 게임 오버
+function gameover() {
+    console.log("게임오버");
+    clearInterval(fallInterval);
 }
 
 document.addEventListener('keydown', e => {
@@ -166,7 +190,7 @@ document.addEventListener('keydown', e => {
             break;
         // 스페이스바
         case 32:
-
+            dropBlock();
             break;
         default:
             break;
