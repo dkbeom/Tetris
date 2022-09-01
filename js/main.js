@@ -9,7 +9,7 @@ const COLS = 10;
 let testMoving;
 
 const movingBlock = {
-    type: "tree",
+    type: "elRight",
     direction: 1,
     X: 0,
     Y: 0,
@@ -24,7 +24,7 @@ function init() {
         prependNewLine();
     }
 
-    //table.children[0].children[1].classList.add('tree');
+    table.children[15].children[6].classList.add('seized');
     renderBlock();
 }
 
@@ -48,7 +48,7 @@ function createNewBlock() {
 }
 
 // 블럭 렌더링
-function renderBlock() {
+function renderBlock(move, moveType) {
     const {type, direction, X, Y} = movingBlock;
     // 기존 무빙 제거
     const moving = document.querySelectorAll(".moving");
@@ -59,7 +59,12 @@ function renderBlock() {
     BLOCKS[type][direction].forEach(element=>{
         const x = element[0] + X;
         const y = element[1] + Y;
-        table.children[y].children[x].classList.add(type, "moving");
+        // 블럭이 밑으로 내려오다 땅이나 블럭에 부딛혔을 때, seized 상태로 변환
+        if(move === false && moveType === 'Y'){
+            table.children[y].children[x].classList.add(type, "seized");
+        } else {
+            table.children[y].children[x].classList.add(type, "moving");
+        }
     })
 }
 
@@ -80,12 +85,24 @@ function testBlock() {
 
 // 블럭을 움직이는 함수
 function moveBlock(moveType, amount) {
-    
+    let move = true;
     movingBlock[moveType] += amount;
     
     // 테스트 불통하면
     if(testBlock()){
         movingBlock[moveType] -= amount;
+        move = false;
+    }
+    renderBlock(move, moveType);
+}
+
+// 블럭을 돌리는 함수
+function changeDirection() {
+    movingBlock["direction"] === 3 ? movingBlock["direction"] = 0 : movingBlock["direction"] += 1;
+    
+    // 테스트 불통하면
+    if(testBlock()){
+        movingBlock["direction"] === 0 ? movingBlock["direction"] = 3 : movingBlock["direction"] -= 1;
     }
     renderBlock();
 }
@@ -106,7 +123,7 @@ document.addEventListener('keydown', e => {
             break;
         // 위쪽 화살표
         case 38:
-            
+            changeDirection();
             break;
         // 스페이스바
         case 32:
