@@ -3,18 +3,20 @@ import BLOCKS from "./blocks.js";
 // DOM
 const table = document.querySelector(".playground > table");
 const scoreDisplay = document.querySelector(".score");
+const finalScore = document.querySelector(".gameover .gameover-modal .finalScoreValue");
+const ending = document.querySelector(".gameover");
+const restart = document.querySelector(".restart");
 
 const ROWS = 20;
 const COLS = 10;
 
-let testMoving;
-let score = 0;
+let score;
 let fallInterval;
 let duration = 1000;
 
 const movingBlock = {
-    type: "elRight",
-    direction: 1,
+    type: "",
+    direction: 0,
     X: 0,
     Y: 0,
 };
@@ -23,7 +25,7 @@ const movingBlock = {
 init();
 
 function init() {
-    testMoving = { ...movingBlock };
+    score = 0;
     for (let i = 0; i < ROWS; i++) {
         prependNewLine();
     }
@@ -168,6 +170,8 @@ function createNewBlock() {
 function gameover() {
     console.log("게임오버");
     clearInterval(fallInterval);
+    finalScore.innerText = score;
+    ending.style.display = "flex";
 }
 
 document.addEventListener('keydown', e => {
@@ -195,4 +199,12 @@ document.addEventListener('keydown', e => {
         default:
             break;
     }
+})
+
+restart.addEventListener('click', () => {
+    table.innerHTML = "";
+    ending.style.display = "none";
+    scoreDisplay.innerText = 0;
+    finalScore.innerText = 0;
+    init();
 })

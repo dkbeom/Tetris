@@ -3,6 +3,53 @@ body {
     text-align: center;
 }
 
+.wrapper {
+    
+}
+
+.gameover {
+    background: rgba(0,0,0,.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameover .gameover-modal {
+    width: 300px;
+    padding: 50px 30px;
+    background: #fff;
+    border-radius: 5px;
+}
+
+.gameover .gameover-modal .gameover-text {
+    padding-bottom: 30px;
+}
+
+.gameover .gameover-modal .finalScore {
+    margin-top: 30px;
+    color: tomato;
+}
+
+.gameover .gameover-modal .finalScoreValue {
+    padding: 20px 50px 50px;
+    color: tomato;
+}
+
+.gameover .gameover-modal .restart {
+    padding: 5px 10px;
+    color: #fff;
+    font-size: 20px;
+    background: salmon;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
 .playground table {
     margin: 20px auto;
 }
