@@ -2,11 +2,13 @@ import BLOCKS from "./blocks.js";
 
 // DOM
 const table = document.querySelector(".playground > table");
+const scoreDisplay = document.querySelector(".score");
 
 const ROWS = 20;
 const COLS = 10;
 
 let testMoving;
+let score = 0;
 
 const movingBlock = {
     type: "elRight",
@@ -25,7 +27,8 @@ function init() {
     }
 
     table.children[15].children[6].classList.add('seized');
-    renderBlock();
+    
+    createNewBlock();
 }
 
 // 테이블 맨 위에 한 줄 추가
@@ -53,7 +56,7 @@ function renderBlock(move="", moveType="") {
         // 블럭이 밑으로 내려오다 땅이나 블럭에 부딛혔을 때, seized 상태로 변환
         if(move === false && moveType === 'Y'){
             seizeBlock();
-            //checkMatch();
+            checkMatch();
             createNewBlock();
             return true;
         } else {
@@ -112,14 +115,28 @@ function seizeBlock() {
 
 // 줄이 맞춰져있는지 확인
 function checkMatch() {
-
+    table.childNodes.forEach(row => {
+        let match = true;
+        row.childNodes.forEach(element => {
+            if(!element.classList.contains("seized")) {
+                match = false;
+            }
+        })
+        // 해당 라인이 매치라면
+        if(match) {
+            row.remove();
+            prependNewLine();
+            score++;
+            scoreDisplay.innerText = score;
+        }
+    })
 }
 
 // 새로운 블럭 생성
 function createNewBlock() {
     const blockTypeList = Object.keys(BLOCKS);
     const random = Math.floor(Math.random() * blockTypeList.length);
-    console.log("뉴블럭");
+
     // 생성되는 새 블럭
     movingBlock.type = blockTypeList[random];
     movingBlock.direction = 0;
