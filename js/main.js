@@ -38,17 +38,8 @@ function prependNewLine() {
     table.prepend(row);
 }
 
-// 새로운 블럭 생성
-function createNewBlock() {
-    const blockList = Object.keys(BLOCKS);
-    const random = Math.floor(Math.random() * blockList.length);
-
-    // 랜덤으로 정해진 블록타입
-    blockList[random];
-}
-
 // 블럭 렌더링
-function renderBlock(move, moveType) {
+function renderBlock(move="", moveType="") {
     const {type, direction, X, Y} = movingBlock;
     // 기존 무빙 제거
     const moving = document.querySelectorAll(".moving");
@@ -56,12 +47,15 @@ function renderBlock(move, moveType) {
         movingElement.classList.remove(type, "moving");
     })
     // 새 무빙 추가
-    BLOCKS[type][direction].forEach(element=>{
+    BLOCKS[type][direction].some(element=>{
         const x = element[0] + X;
         const y = element[1] + Y;
         // 블럭이 밑으로 내려오다 땅이나 블럭에 부딛혔을 때, seized 상태로 변환
         if(move === false && moveType === 'Y'){
-            table.children[y].children[x].classList.add(type, "seized");
+            seizeBlock();
+            //checkMatch();
+            createNewBlock();
+            return true;
         } else {
             table.children[y].children[x].classList.add(type, "moving");
         }
@@ -70,7 +64,6 @@ function renderBlock(move, moveType) {
 
 // 블럭이 불가능한지 테스트(불가능하면 true 반환)
 function testBlock() {
-    // const {type, direction, X, Y} = testMoving;
     const {type, direction, X, Y} = movingBlock;
     return BLOCKS[type][direction].some(element=>{
         const x = element[0] + X;
@@ -105,6 +98,35 @@ function changeDirection() {
         movingBlock["direction"] === 0 ? movingBlock["direction"] = 3 : movingBlock["direction"] -= 1;
     }
     renderBlock();
+}
+
+// 블럭을 놓여진 상태로 변환
+function seizeBlock() {
+    const {type, direction, X, Y} = movingBlock;
+    BLOCKS[type][direction].forEach(element => {
+        const x = element[0] + X;
+        const y = element[1] + Y;
+        table.children[y].children[x].classList.add(type, "seized");
+    })
+}
+
+// 줄이 맞춰져있는지 확인
+function checkMatch() {
+
+}
+
+// 새로운 블럭 생성
+function createNewBlock() {
+    const blockTypeList = Object.keys(BLOCKS);
+    const random = Math.floor(Math.random() * blockTypeList.length);
+    console.log("뉴블럭");
+    // 생성되는 새 블럭
+    movingBlock.type = blockTypeList[random];
+    movingBlock.direction = 0;
+    movingBlock.X = 3;
+    movingBlock.Y = 0;
+
+    renderBlock(false, null);
 }
 
 document.addEventListener('keydown', e => {
