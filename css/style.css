@@ -16,3 +16,27 @@ body {
     width: 25px;
     height: 25px;
 }
+
+.tree {
+    background: lightgreen;
+}
+
+.square {
+    background: skyblue;
+}
+
+.bar {
+    background: salmon;
+}
+
+.zee {
+    background: blue;
+}
+
+.elLeft {
+    background: violet;
+}
+
+.elRight {
+    background: tomato;
+}
