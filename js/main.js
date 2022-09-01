@@ -10,7 +10,7 @@ let testMoving;
 
 const movingBlock = {
     type: "tree",
-    direction: 0,
+    direction: 1,
     X: 0,
     Y: 0,
 };
@@ -24,13 +24,8 @@ function init() {
         prependNewLine();
     }
 
-    console.log(table);
-    table.children[0].children[1].classList.add('tree');
-    //console.log(table.children[0].children[2].classList.contains('tree'));
-
-    // createNewBlock();
-    // renderBlock();
-    // testBlock();
+    //table.children[0].children[1].classList.add('tree');
+    renderBlock();
 }
 
 // 테이블 맨 위에 한 줄 추가
@@ -54,22 +49,30 @@ function createNewBlock() {
 
 // 블럭 렌더링
 function renderBlock() {
-    const moving = document.querySelectorAll('.moving');
-    
-}
-
-// 블럭이 가능한지 테스트
-function testBlock() {
-    // const {type, direction, X, Y} = testMoving;
     const {type, direction, X, Y} = movingBlock;
-    console.log(BLOCKS[type][direction]);
+    // 기존 무빙 제거
+    const moving = document.querySelectorAll(".moving");
+    moving.forEach(movingElement=>{
+        movingElement.classList.remove(type, "moving");
+    })
+    // 새 무빙 추가
     BLOCKS[type][direction].forEach(element=>{
         const x = element[0] + X;
         const y = element[1] + Y;
-        if (x < 0 || x >= COLS || y < 0 || y >= ROWS || table.children[x].children[y].classList.contains('seized')) {
+        table.children[y].children[x].classList.add(type, "moving");
+    })
+}
+
+// 블럭이 불가능한지 테스트(불가능하면 true 반환)
+function testBlock() {
+    // const {type, direction, X, Y} = testMoving;
+    const {type, direction, X, Y} = movingBlock;
+    return BLOCKS[type][direction].some(element=>{
+        const x = element[0] + X;
+        const y = element[1] + Y;
+        if (x < 0 || x >= COLS || y < 0 || y >= ROWS || table.children[y].children[x].classList.contains('seized')) {
             // 테스트 불통
-            return false;
-        } else {
+            console.log("testBlock 불통");
             return true;
         }
     })
@@ -77,11 +80,14 @@ function testBlock() {
 
 // 블럭을 움직이는 함수
 function moveBlock(moveType, amount) {
+    
     movingBlock[moveType] += amount;
+    
     // 테스트 불통하면
-    if(!testBlock()){
+    if(testBlock()){
         movingBlock[moveType] -= amount;
     }
+    renderBlock();
 }
 
 document.addEventListener('keydown', e => {
@@ -100,7 +106,7 @@ document.addEventListener('keydown', e => {
             break;
         // 위쪽 화살표
         case 38:
-
+            
             break;
         // 스페이스바
         case 32:

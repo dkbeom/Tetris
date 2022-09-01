@@ -40,3 +40,7 @@ body {
 .elRight {
     background: tomato;
 }
+
+.seized {
+    background: red;
+}
