@@ -1,0 +1,18 @@
+body {
+    font-size: 30px;
+    text-align: center;
+}
+
+.playground table {
+    margin: 20px auto;
+}
+
+.playground table tr {
+    
+}
+
+.playground table tr td {
+    border: 1px solid gray;
+    width: 25px;
+    height: 25px;
+}
