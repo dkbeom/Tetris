@@ -6,6 +6,8 @@ const scoreDisplay = document.querySelector(".score");
 const finalScore = document.querySelector(".gameover .gameover-modal .finalScoreValue");
 const ending = document.querySelector(".gameover");
 const restart = document.querySelector(".restart");
+const startingScreen = document.querySelector(".gamestart");
+const start = document.querySelector(".start");
 
 const ROWS = 20;
 const COLS = 10;
@@ -20,9 +22,6 @@ const movingBlock = {
     X: 0,
     Y: 0,
 };
-
-
-init();
 
 function init() {
     for (let i = 0; i < ROWS; i++) {
@@ -198,6 +197,11 @@ document.addEventListener('keydown', e => {
         default:
             break;
     }
+})
+
+start.addEventListener('click', () => {
+    startingScreen.style.display = "none";
+    init();
 })
 
 restart.addEventListener('click', () => {
