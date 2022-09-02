@@ -80,14 +80,18 @@ body {
     background: blue;
 }
 
-.elLeft {
+.invertedZee {
+    background: brown;
+}
+
+.el {
     background: violet;
 }
 
-.elRight {
+.invertedEl {
     background: tomato;
 }
 
-.seized {
+/* .seized {
     background: red;
-}
+} */

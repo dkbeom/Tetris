@@ -10,9 +10,9 @@ const restart = document.querySelector(".restart");
 const ROWS = 20;
 const COLS = 10;
 
-let score;
+let score = 0;
 let fallInterval;
-let duration = 1000;
+let duration = 500;
 
 const movingBlock = {
     type: "",
@@ -25,7 +25,6 @@ const movingBlock = {
 init();
 
 function init() {
-    score = 0;
     for (let i = 0; i < ROWS; i++) {
         prependNewLine();
     }
@@ -206,5 +205,6 @@ restart.addEventListener('click', () => {
     ending.style.display = "none";
     scoreDisplay.innerText = 0;
     finalScore.innerText = 0;
+    score = 0;
     init();
 })
